@@ -6,10 +6,9 @@ Collection of assembly routines in one place to facilitate reuse.
 
 In order to debug the routines you should first clone this repository or download the included `Makefile`.
 
-Each file will hold one routine and you can create an executable with a `_start` entry for debugging by supplying a
-`debug_<routine name>=1` environment variable.
-
-For example to create an executable `strlen` that runs tests when executed or debugged, do: `make debug_strlen=1`.
+Each file will hold one routine. Most include a `_start` entry for testing and you can create an executable via `make
+<id>`.
+For example to create an executable `strlen` that runs tests when executed or debugged, do: `make strlen`.
 
 ## routines
 

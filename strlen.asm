@@ -11,7 +11,7 @@ section .text
 ; RETURNS:
 ;   edx:  the length of the string including the 0 terminator
 ; --------------------------------------------------------------
-  global strlen
+global strlen
 strlen:
 
   push  eax
@@ -53,7 +53,7 @@ section .data
 ; TESTS ;
 ;-------+
 
-%ifenv debug_strlen
+%ifenv strlen 
 
 %macro _sys_write 2
   mov eax, 4

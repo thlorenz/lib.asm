@@ -12,7 +12,7 @@ section .text
 ;   esi:  addr in string at which the number starts
 ;   edx:  length of stored string
 ; --------------------------------------------------------------
-  global hex2decimal
+global hex2decimal
 hex2decimal:
 
   push eax
@@ -52,7 +52,7 @@ hex2decimal:
 ; TESTS ;
 ;-------+
 
-%ifenv debug_hex2decimal
+%ifenv hex2decimal 
 
 section .data
   BUFFER: times 32 db 0

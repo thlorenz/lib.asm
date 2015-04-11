@@ -1,4 +1,4 @@
-SRCS=$(EXEC).asm ./strlen.asm ./hex2decimal.asm
+SRCS=$(wildcard *.asm)
 OBJS= $(subst .asm,.o, $(SRCS))
 EXECS=$(subst .asm,, $(SRCS))
 
@@ -13,33 +13,28 @@ endif
 
 DBGI=dwarf
 
-ifdef debug_strlen
-	TASK=debug_strlen
-else ifdef debug_hex2decimal
-	TASK=debug_hex2decimal
-else
-	TASK=help
-endif
+# This env var is picked up by the macro assembly step via `%ifenv id` to include `_start`
+export $(MAKECMDGOALS)
 
-all: $(TASK)
+all: clean help
 
-gdb: clean $(EXEC)
-	gdb -- $(EXEC)
+clean:
+	@rm -f $(OBJS) $(EXECS)
 
 .SUFFIXES: .asm .o
 .asm.o:
 	@nasm -f $(NASM_FMT) -g -F $(DBGI) $< -o $@
 
-strlen: strlen.o
+.o:
 	@ld -m $(LD_EMM) -o $@ $^
 
-hex2decimal: hex2decimal.o
-	@ld -m $(LD_EMM) -o $@ $^
+ansi_cursor_position: sys_write_stdout.o hex2decimal.o
+ansi_term_clear: ansi_term_clear.o sys_write_stdout.o
 
 help:
-	@echo "Please run make with a task, i.e.: make debug_strlen=1"
+	@echo "Please run make with a task, i.e.: \"make strlen\""
+	@echo "In case you get any of the below errors, run: \"make clean\""
+	@echo "  - \"multiple definition of '_start'\""
+	@echo "  - \"cannot find entry symbol _start\""
 
-clean:
-	@rm -f $(OBJS) $(EXECS)
-
-.PHONY: all clean gdb
+.PHONY: all clean
