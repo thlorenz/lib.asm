@@ -1,0 +1,128 @@
+; vim: ft=nasm
+
+; ---------------------------------------------------------------------------
+; Standard Signals
+;  Linux supports the standard signals listed below.
+; 
+;  The  entries  in  the  "Action" column of the table specify the default
+;  action for the signal, as follows:
+; 
+;  Term   Default action is to terminate the process.
+;  Ign    Default action is to ignore the signal.
+;  Core   Default action is to terminate the process and dump core.
+;  Stop   Default action is to stop the process.
+; 
+;       Signal Value   Action   Comment
+;       ------ ------  -------  --------------------------------------
+%define SIGHUP    1  ;  Term    Hangup on controlling terminal or parent death
+%define SIGINT    2  ;  Term    Interrupt from keyboard
+%define SIGQUIT   3  ;  Core    Quit from keyboard
+%define SIGILL    4  ;  Core    Illegal Instruction
+%define SIGTRAP   5  ;  Core    Trace/breakpoint trap
+%define SIGIOT    6  ;  Core    IOT trap. A synonym for SIGABRT
+%define SIGABRT   6  ;  Core    Abort signal from abort(3)
+%define SIGBUS    7  ;  Core    Bus error (bad memory access)
+%define SIGFPE    8  ;  Core    Floating point exception
+%define SIGKILL   9  ;  Term    Kill signal
+%define SIGUSR1   10 ;  Term    User-defined signal 1
+%define SIGSEGV   11 ;  Core    Invalid memory reference
+%define SIGUSR2   12 ;  Term    User-defined signal 2
+%define SIGPIPE   13 ;  Term    Broken pipe: write to pipe with no readers
+%define SIGALRM   14 ;  Term    Timer signal from alarm(2)
+%define SIGTERM   15 ;  Term    Termination signal
+%define SIGSTKFLT 16 ;  Term    Stack fault on coprocessor (unused)
+%define SIGCHLD   17 ;  Ign     Child stopped or terminated
+%define SIGCONT   18 ;  ---     Continue if stopped
+%define SIGSTOP   19 ;  Stop    Stop process
+%define SIGTSTP   20 ;  Stop    Stop typed at tty
+%define SIGTTIN   21 ;  Stop    tty input for background process
+%define SIGTTOU   22 ;  Stop    tty output for background process
+%define SIGURG    23 ;  Ign     Urgent condition on socket (4.2 BSD)
+%define SIGXCPU   24 ;  Core    CPU time limit exceeded (4.2 BSD)
+%define SIGXFSZ   25 ;  Core    File size limit exceeded (4.2 BSD)
+%define SIGVTALRM 26 ;  Term    Virtual alarm clock (4.2 BSD)
+%define SIGPROF   27 ;  Term    Profiling timer expired
+%define SIGWINCH  28 ;  Ign     Window resize signal (4.3 BSD, Sun)
+%define SIGPOLL   29 ;  Term    Pollable event (Sys V). Synonym of SIGIO
+%define SIGIO     29 ;  Term    I/O now possible (4.2 BSD)
+%define SIGPWR    30 ;  Term    Power failure (System V)
+%define SIGINFO   30 ;  Term    A synonym for SIGPWR
+%define SIGUNUSED 31 ;  Term    Unused signal (will be SIGSYS)
+;       SIGLOST   -       Term    File lock lost
+;
+; 
+;  The signals SIGKILL and SIGSTOP cannot be caught, blocked, or  ignored.
+;  SIGPWR, SIGIO are usually ignored by default.
+; 
+;  Up to and including Linux 2.2, the default behavior for SIGSYS,SIGXCPU,
+;  SIGXFSZ, and SIGBUS was to terminate the process (without a core  dump).
+;  Linux 2.4 conforms to POSIX, terminating the process with a core dump.
+; 
+; Real-time Signals
+;  Linux supports real-time signals as originally defined in  the  POSIX.4
+;  real-time  extensions  (and  now included in POSIX 1003.1-2001). Linux
+;  supports 32 real-time  signals, numbered  from 32  (SIGRTMIN)  to  63
+;  (SIGRTMAX).   (Programs should always refer to real-time signals using
+;  notation SIGRTMIN+n, since the range of real-time signal numbers varies
+;  across Unices.)
+; ---------------------------------------------------------------------------
+; 
+;   Alphabetic list of common signals
+; 
+; SIGABRT(6) - Usually sent by program to terminate itself and leave a
+;   core dump.
+; 
+; SIGALRM(14) - Notification by timer that requested alarm has occurred.
+;   Alarms can be set by "alarm" system call.
+; 
+; SIGBUS(7) - Possible triggers are 1.hardware failure, 2.out-of-memory
+;   3.cpu problem.  It can be caught but the default action (terminate)
+;   is usually best.
+; 
+; SIGCHLD(17) - Notification to parent about death of child.
+; 
+; SIGCONT(18) - Restarts a process stopped by SIGSTOP.  This signal
+;   can be caught or blocked.  If blocked the process will start and
+;   SIGCONT will be pending.
+; 
+; SIGFPE(8) - Triggered by illegal math operation.  Includes floating
+;   point math and integer math errors (divide by zero).
+; 
+; SIGHUP(1) - Status signal saying the terminal is no longer available.
+;   Often this is caused by a user logging out and leaving processes
+;   running.
+; 
+; SIGINT(2) - Interrupt from keyboard.  This is usually the ctrl-c
+;   key.
+; 
+; SIGILL(4) - Illegal instruction signal.  Not much can be done, so
+;   it is best to terminate or use the default handler which also
+;   terminates.
+; 
+; SIGKILL(9) - Can not be caught or blocked.  The process is killed.
+; 
+; SIGPIPE(13) - Triggered by write to half closed pipe or pipe
+;   not configured correctly.
+; 
+; SIGQUIT(3) - Triggered by keyboard quit key.
+; 
+; SIGSEGV(11) - Triggered by memory access outside legal range.
+; 
+; SIGSTOP(19) - Stops process until external process sends SIGCONT.
+;   Since this process is stopped the signal can not be caught.
+; 
+; SIGTERM(15) - Sent by user who wants process to die naturally.  The
+;   process is expected to exit.
+; 
+; SIGTSTP(20) - Sent to process by keyboard suspend key is typed on
+;   its controlling tty.  If caught the process continues.  If not caught
+;   the process will be stopped by default handler.
+; 
+; SIGTTIN(21) - Triggered by background process trying to read from
+;   the terminal.  The default handler suspends reading process.
+; 
+; SIGTTOU(22) - Triggered by background process trying to write to
+;   terminal.  The default handler will stop the process.
+; 
+; SIGWINCH(28) - Triggered when the size of a terminal window is changed.
+
