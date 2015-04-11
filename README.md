@@ -1,0 +1,57 @@
+# lib.asm
+
+Collection of assembly routines in one place to facilitate reuse.
+
+## debugging and testing
+
+In order to debug the routines you should first clone this repository or download the included `Makefile`.
+
+Each file will hold one routine and you can create an executable with a `_start` entry for debugging by supplying a
+`debug_<routine name>=1` environment variable.
+
+For example to create an executable `strlen` that runs tests when executed or debugged, do: `make debug_strlen=1`.
+
+## routines
+
+### [strlen](strlen.asm)
+
+```asm
+; --------------------------------------------------------------
+; strlen
+;   determines length of given string (not counting the 0 terminator)
+;
+; ARGS:
+;   edi:  address of the string whose length to determine
+;         string needs to end with 0 terminator (ala C strings)
+; RETURNS:
+;   edx:  the length of the string including the 0 terminator
+; --------------------------------------------------------------
+```
+
+#### Installation
+
+```sh
+curl -L https://raw.githubusercontent.com/thlorenz/lib.asm/master/strlen.asm > strlen.asm
+```
+
+### [hex2decimal](hex2decimal.asm)
+
+```asm
+; --------------------------------------------------------------
+; hex2decimal
+;   converts given number to decimal string and stores it BEFORE the given address
+;
+; ARGS:
+;   esi:  address of the end of the string in which to store the decimal number
+;   eax:  number to store
+; RETUNRS:
+;   esi:  addr in string at which the number starts
+;   edx:  length of stored string
+; --------------------------------------------------------------
+```
+
+#### Installation
+
+```sh
+curl -L https://raw.githubusercontent.com/thlorenz/lib.asm/master/hex2decimal.asm > hex2decimal.asm
+```
