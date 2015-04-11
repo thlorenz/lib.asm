@@ -16,10 +16,11 @@ DBGI=dwarf
 # This env var is picked up by the macro assembly step via `%ifenv id` to include `_start`
 export $(MAKECMDGOALS)
 
-all: clean help
-
-clean:
-	@rm -f $(OBJS) $(EXECS)
+all:
+	@echo "Please run make with a task, i.e.: \"make strlen\""
+	@echo "In case you get any of the below errors, run: \"make clean\""
+	@echo "  - \"multiple definition of '_start'\""
+	@echo "  - \"cannot find entry symbol _start\""
 
 .SUFFIXES: .asm .o
 .asm.o:
@@ -28,13 +29,24 @@ clean:
 .o:
 	@ld -m $(LD_EMM) -o $@ $^
 
+# Targets (routines that include example/test at optional `_start` section)
+# included here to show as explicit make targets (i.e. for 'make <Tab>' autocomplete)
 ansi_cursor_position: sys_write_stdout.o hex2decimal.o
-ansi_term_clear: ansi_term_clear.o sys_write_stdout.o
 
-help:
-	@echo "Please run make with a task, i.e.: \"make strlen\""
-	@echo "In case you get any of the below errors, run: \"make clean\""
-	@echo "  - \"multiple definition of '_start'\""
-	@echo "  - \"cannot find entry symbol _start\""
+ansi_cursor_up: sys_write_stdout.o
+
+ansi_term_clear: sys_write_stdout.o
+
+
+hex2decimal:
+
+strlen:
+
+sys_write_stdout:
+
+# End executable targets
+
+clean:
+	@rm -f $(OBJS) $(EXECS)
 
 .PHONY: all clean

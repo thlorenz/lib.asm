@@ -10,6 +10,16 @@ Each file will hold one routine. Most include a `_start` entry for testing and y
 <id>`.
 For example to create an executable `strlen` that runs tests when executed or debugged, do: `make strlen`.
 
+The following targets can be run:
+
+```
+ansi_cursor_position
+ansi_term_clear
+hex2decimal
+strlen
+sys_write_stdout
+```
+
 ## routines
 
 ### [strlen](strlen.asm)
