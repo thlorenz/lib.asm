@@ -17,10 +17,11 @@ section .text
 ;   ah: row
 ;   al: column
 ; CALLS:  sys_write_stdout
-;         hex2decimal  
+;         hex2decimal
 ; --------------------------------------------------------------
 global ansi_cursor_position
 ansi_cursor_position:
+  push  eax
   push  ecx
   push  edx
   push  esi
@@ -54,6 +55,7 @@ ansi_cursor_position:
   pop   esi
   pop   edx
   pop   ecx
+  pop   eax
   ret
 
 
