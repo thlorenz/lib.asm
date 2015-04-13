@@ -40,9 +40,11 @@ ansi_term_clear: sys_write_stdout.o
 
 hex2decimal:
 
-sys_signal: sys_write_stdout.o
-
 strlen:
+
+sys_nanosleep: sys_write_stdout.o
+
+sys_signal : sys_write_stdout.o
 
 sys_write_stdout:
 
