@@ -20,7 +20,15 @@ strlen
 sys_write_stdout
 ```
 
-## routines
+
+## functions
+
+### conventions
+
+- all registers are preserved unless a return value is required
+- values are returned inside of EAX and if needed in EDX
+- args differ from function to function with the general rule that EAX is used for most inputs and ESI for pointers to
+  strings
 
 ### [strlen](strlen.asm)
 

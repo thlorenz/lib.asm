@@ -5,19 +5,18 @@ section .text
 ; strlen
 ;   determines length of given string (not counting the 0 terminator)
 ;
-; ARGS:
-;   edi:  address of the string whose length to determine
-;         string needs to end with 0 terminator (ala C strings)
-; RETURNS:
-;   edx:  the length of the string including the 0 terminator
+; args: esi = address of the string whose length to determine
+;             string needs to end with 0 terminator (ala C strings)
+; out : eax = the length of the string including the 0 terminator
+;       all other registers preserved
 ; --------------------------------------------------------------
 global strlen
 strlen:
 
-  push  eax
   push  ecx
   push  edi
 
+  mov   edi, esi
   xor   eax, eax          ; we are searching for 0
   mov   ecx, 0000ffffh    ; expecting strings no longer than 65535 bytes
   cld                     ; search upwards in memory
@@ -25,12 +24,11 @@ strlen:
   repne scasb             ; read starting at edi until we find 0 or run out of bytes
   jnz    .fail
 
-  mov   edx, 0000fffeh    ; ecx was decremented each time (one too many since it includes 0 terminator)
-  sub   edx, ecx          ; so substracting from original (ecx - 1) gets us the string length
+  mov   eax, 0000fffeh    ; ecx was decremented each time (one too many since it includes 0 terminator)
+  sub   eax, ecx          ; so substracting from original (ecx - 1) gets us the string length
 
   pop   edi
   pop   ecx
-  pop   eax
 
   ret
 
@@ -53,7 +51,7 @@ section .data
 ; TESTS ;
 ;-------+
 
-%ifenv strlen 
+%ifenv strlen
 
 %macro _sys_write 2
   mov eax, 4
@@ -81,10 +79,10 @@ global _start
 _start:
   nop
 
-  mov edi, SAMPLEMSG
+  mov esi, SAMPLEMSG
   call strlen
 
-  cmp edx, STRLEN
+  cmp eax, STRLEN
 
   jz .pass
 

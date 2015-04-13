@@ -6,18 +6,15 @@ section .text
 ; sys_signal
 ;     installs a signal handler
 ;
-; ARGS:
-;   ebx:  the signal number to handle (see signals.mac)
-;   ecx:  the address of the handler
-;
+; args: ebx = the signal number to handle (see signals.mac)
+;       ecx = the address of the handler
+; out : nothing, all registers preserved
 ; --------------------------------------------------------------
 global sys_signal
 sys_signal:
-  push eax
-
+  push  eax
   mov   eax, 48 ; sys_signal
   int   80h
-
   pop   eax
   ret
 

@@ -5,10 +5,9 @@ section .text
 ; sys_write_stdout
 ;     writes string at given address to stdout
 ;
-; ARGS:
-;   ecx:  address of string to write
-;   edx:  length of string to write
-;
+; args: ecx = address of string to write
+;       edx = length of string to write
+; out : nothing, all registers preserved
 ; --------------------------------------------------------------
 global sys_write_stdout
 sys_write_stdout:

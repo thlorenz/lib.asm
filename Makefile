@@ -33,14 +33,11 @@ all:
 # included here to show as explicit make targets (i.e. for 'make <Tab>' autocomplete)
 ansi_cursor_position: sys_write_stdout.o hex2decimal.o
 
-ansi_cursor_up: sys_write_stdout.o
-
 ansi_term_clear: sys_write_stdout.o
-
 
 hex2decimal:
 
-strlen:
+strlen: strlen.o
 
 sys_nanosleep: sys_write_stdout.o
 

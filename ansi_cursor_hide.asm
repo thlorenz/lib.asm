@@ -10,7 +10,9 @@ section .text
 ; ansi_cursor_hide
 ;     hides cursor
 ;
-; CALLS: sys_write_stdout
+; args  : none
+; out   : nothing, all registers preserved
+; calls : sys_write_stdout
 ; --------------------------------------------------------------
 global ansi_cursor_hide
 ansi_cursor_hide:

@@ -10,7 +10,9 @@ section .text
 ; ansi_term_clear
 ;     clears the terminal
 ;
-; CALLS: sys_write_stdout
+; args: none
+; out : nothing, all registers preserved
+; calls: sys_write_stdout
 ; --------------------------------------------------------------
 global ansi_term_clear
 ansi_term_clear:

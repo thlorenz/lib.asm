@@ -13,11 +13,10 @@ section .text
 ; ansi_cursor_position
 ;     moves cursor to given position
 ;
-; ARGS:
-;   ah: row
-;   al: column
-; CALLS:  sys_write_stdout
-;         hex2decimal
+; args: ah = row
+;       al = column
+; out : nothing, all registers preserved
+; calls: sys_write_stdout, hex2decimal
 ; --------------------------------------------------------------
 global ansi_cursor_position
 ansi_cursor_position:
@@ -34,23 +33,23 @@ ansi_cursor_position:
 
   ; poke coordinates into positions
   mov   ecx, eax
-  shr   eax, 8                ; isolate ah
+  shr   eax, 8                  ; isolate ah
 
-  mov esi, ansi_cursor_x + 3  ; hex2decimal stores right before esi
+  mov   esi, ansi_cursor_x + 3  ; hex2decimal stores right before esi
   call hex2decimal
 
   mov   eax, ecx
-  and   eax, 00ffh            ; isolate al
+  and   eax, 00ffh              ; isolate al
 
-  mov esi, ansi_cursor_y + 3
-  call hex2decimal
+  mov   esi, ansi_cursor_y + 3
+  call  hex2decimal
 
   mov esi, ansi_cursor
 
   ; sys_write to stdout
   mov   ecx, ansi_cursor
   mov   edx, ansi_cursor_len
-  call sys_write_stdout
+  call  sys_write_stdout
 
   pop   esi
   pop   edx

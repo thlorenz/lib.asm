@@ -15,21 +15,24 @@ section .text
 ;     sleeps for given amount of seconds + nanoseconds
 ;     @see 'man nanosleep'
 ;
-; ARGS:
-;     ebx: number of seconds to sleep for
-;     ecx: number of nanoseconds to sleep for
+; args: ecx = number of seconds to sleep for
+;       edx = number of nanoseconds to sleep for
+; out : nothing, all registers preserved
 ; --------------------------------------------------------------
 global sys_nanosleep
 sys_nanosleep:
   push  eax
-                            ; build timespec struct on stack
-  push  ebx                 ; push seconds (tv_sec)
-  push  ecx                 ; followed by nanoseconds (tv_nsec)
-                            ; esp now points @ecx
+  push  ebx
+  push  ecx
+
+                                ; build timespec struct on top of the stack
+  mov   dword [ esp - 8 ], ecx  ; push seconds (tv_sec)
+  mov   dword [ esp - 4 ], edx  ; followed by nanoseconds (tv_nsec)
+                                ; esp now points @ecx
 
   mov   eax, SYS_NANOSLEEP
-  lea   ebx, [ esp + 4 ]    ; point ebx at timespec
-  xor   ecx, ecx            ; don't need updates about time slept
+  lea   ebx, [ esp - 8]         ; point ebx at timespec
+  xor   ecx, ecx                ; don't need updates about time slept
   int   80h
 
   pop   ecx
@@ -42,6 +45,10 @@ sys_nanosleep:
 ;-------+
 
 %ifenv sys_nanosleep
+
+%define milliseconds 1000000
+
+
 extern sys_write_stdout
 
 section .data
@@ -55,8 +62,8 @@ _start:
 
   nop
 
-  mov   ebx, 1          ; sleep exactly one second
-  xor   ecx, ecx        ; not interested in nano seconds
+  mov   ecx, 1                  ; sleep exactly one and
+  mov   edx, 500 * milliseconds ; a half second
   call  sys_nanosleep
 
   mov   ecx, msg
