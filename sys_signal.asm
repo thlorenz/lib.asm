@@ -24,9 +24,9 @@ sys_signal:
 
 %ifenv sys_signal
 
-%include "signals.mac"
-
 extern sys_write_stdout
+;;;
+%include "signals.mac"
 
 section .text
 
@@ -41,7 +41,7 @@ sig_term_handler:
   mov   edx, caught_sigterm_len
   call  sys_write_stdout
   jmp   exit
-
+;;;
 sig_hup_handler:
   mov   ecx, caught_sighup
   mov   edx, caught_sighup_len
@@ -58,6 +58,7 @@ _start:
   mov   ecx, instructions     ; Instructions
   mov   edx, instructions_len
   call  sys_write_stdout
+;;;
 
   mov   ebx, SIGINT           ; install SIGINT handler (Ctrl-C)
   mov   ecx, sig_int_handler
@@ -66,7 +67,7 @@ _start:
   mov   ebx, SIGTERM          ; install SIGTERM handler (kill <pid>)
   mov   ecx, sig_term_handler
   call  sys_signal
-
+;;;
   mov   ebx, SIGHUP          ; install SIGHUP handler (kill -HUP <pid>)
   mov   ecx, sig_hup_handler
   call  sys_signal

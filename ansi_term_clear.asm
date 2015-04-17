@@ -36,7 +36,9 @@ ansi_term_clear:
 global _start
 _start:
   nop
+;;;
   call ansi_term_clear
+;;;
 
 .exit:
   mov eax, 1

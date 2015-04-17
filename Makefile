@@ -50,4 +50,7 @@ sys_write_stdout:
 clean:
 	@rm -f $(OBJS) $(EXECS)
 
+docs: $(SRCS)
+	node ./tools/gen-api-dox.js
+
 .PHONY: all clean

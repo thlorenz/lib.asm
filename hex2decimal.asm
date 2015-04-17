@@ -39,7 +39,7 @@ hex2decimal:
   jnz   .convert            ; if not keep converting
 
   sub   ecx, esi            ; calculate length of string
-  mov   eax, ecx            
+  mov   eax, ecx
 
   pop   edx
   pop   ecx
@@ -70,10 +70,11 @@ _start:
   nop
 
 .example:
+;;;
   mov   eax, 0x123f           ; number we are printing
   mov   esi, BUFFER + 32      ; end of buffer
   call  hex2decimal
-
+;;;
   ; syswrite
   ; esi points to start of number string
   ; eax set to length of number string
@@ -121,7 +122,7 @@ _start:
   int   80h
 
   mov   ebx, 1
-.exit:  
+.exit:
   mov   eax, 1
   int   80H
 

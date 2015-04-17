@@ -67,11 +67,11 @@ ansi_cursor_position:
 global _start
 _start:
   nop
-
+;;;
   mov ah, 10
   mov al, 30
   call ansi_cursor_position
-
+;;;
   mov   ecx, x
   mov   edx, x_len
   call sys_write_stdout

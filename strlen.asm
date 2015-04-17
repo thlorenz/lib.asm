@@ -78,10 +78,10 @@ global _start
 
 _start:
   nop
-
+;;;
   mov esi, SAMPLEMSG
   call strlen
-
+;;;
   cmp eax, STRLEN
 
   jz .pass

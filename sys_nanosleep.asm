@@ -48,7 +48,6 @@ sys_nanosleep:
 
 %define milliseconds 1000000
 
-
 extern sys_write_stdout
 
 section .data
@@ -61,11 +60,11 @@ global _start
 _start:
 
   nop
-
+;;;
   mov   ecx, 1                  ; sleep exactly one and
   mov   edx, 500 * milliseconds ; a half second
   call  sys_nanosleep
-
+;;;
   mov   ecx, msg
   mov   edx, msg_len
   call sys_write_stdout

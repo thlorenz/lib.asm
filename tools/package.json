@@ -1,0 +1,7 @@
+{
+  "name": "lib.asm-tools",
+  "description": "Tools to generate lib.asm documentation",
+  "devDependencies": {
+    "update-section": "~0.3.3"
+  }
+}

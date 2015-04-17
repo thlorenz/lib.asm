@@ -27,20 +27,24 @@ sys_write_stdout:
 ;-------+
 
 %ifenv sys_write_stdout
+;;;
 section .data
   msg:      db 10,"Hello World!",10
   msg_len   equ $-msg
 
 section .text
+
+;;;
 global _start
 
 _start:
 
   nop
-
+;;;
   mov   ecx, msg
   mov   edx, msg_len
   call sys_write_stdout
+;;;
 
 .exit:
   mov eax, 1
