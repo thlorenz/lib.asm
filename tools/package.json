@@ -2,6 +2,7 @@
   "name": "lib.asm-tools",
   "description": "Tools to generate lib.asm documentation",
   "devDependencies": {
+    "doctoc": "~0.12.0",
     "update-section": "~0.3.3"
   }
 }
