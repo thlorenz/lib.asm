@@ -13,8 +13,8 @@ section .text
 ; ansi_cursor_position
 ;     moves cursor to given position
 ;
-; args: ah = row
-;       al = column
+; args: al = column (x)
+;       ah = row    (y)
 ; out : nothing, all registers preserved
 ; calls: sys_write_stdout, hex2decimal
 ; --------------------------------------------------------------
