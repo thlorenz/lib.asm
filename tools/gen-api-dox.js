@@ -68,7 +68,7 @@ function processFile(file) {
   return {
       file    : path.basename(file)
     , fn      : path.basename(file).slice(0, -4)
-    , rawurl  : 'https://raw.githubusercontent.com/thlorenz/lib.asm/' + path.basename(file)
+    , rawurl  : 'https://raw.githubusercontent.com/thlorenz/lib.asm/master/' + path.basename(file)
     , doc     : doc
     , code    : code
     , example : example

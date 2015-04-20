@@ -127,7 +127,7 @@ ansi_cursor_hide:
 #### installation
 
 ```sh
-curl -L https://raw.githubusercontent.com/thlorenz/lib.asm/ansi_cursor_hide.asm > ansi_cursor_hide.asm
+curl -L https://raw.githubusercontent.com/thlorenz/lib.asm/master/ansi_cursor_hide.asm > ansi_cursor_hide.asm
 ```
 ### [`ansi_cursor_position`](ansi_cursor_position.asm)
 
@@ -197,7 +197,7 @@ ansi_cursor_position:
 #### installation
 
 ```sh
-curl -L https://raw.githubusercontent.com/thlorenz/lib.asm/ansi_cursor_position.asm > ansi_cursor_position.asm
+curl -L https://raw.githubusercontent.com/thlorenz/lib.asm/master/ansi_cursor_position.asm > ansi_cursor_position.asm
 ```
 ### [`ansi_cursor_show`](ansi_cursor_show.asm)
 
@@ -231,7 +231,7 @@ ansi_cursor_show:
 #### installation
 
 ```sh
-curl -L https://raw.githubusercontent.com/thlorenz/lib.asm/ansi_cursor_show.asm > ansi_cursor_show.asm
+curl -L https://raw.githubusercontent.com/thlorenz/lib.asm/master/ansi_cursor_show.asm > ansi_cursor_show.asm
 ```
 ### [`ansi_term_clear`](ansi_term_clear.asm)
 
@@ -272,7 +272,7 @@ ansi_term_clear:
 #### installation
 
 ```sh
-curl -L https://raw.githubusercontent.com/thlorenz/lib.asm/ansi_term_clear.asm > ansi_term_clear.asm
+curl -L https://raw.githubusercontent.com/thlorenz/lib.asm/master/ansi_term_clear.asm > ansi_term_clear.asm
 ```
 ### [`dword2str`](dword2str.asm)
 
@@ -357,7 +357,7 @@ dword2str:
 #### installation
 
 ```sh
-curl -L https://raw.githubusercontent.com/thlorenz/lib.asm/dword2str.asm > dword2str.asm
+curl -L https://raw.githubusercontent.com/thlorenz/lib.asm/master/dword2str.asm > dword2str.asm
 ```
 ### [`hex2decimal`](hex2decimal.asm)
 
@@ -402,7 +402,7 @@ hex2decimal:
   mov   byte [esi], dl      ; store converted digit
                             ;   stosb would be faster here, but then we'd need to
                             ;   rearrange which is in what register which also takes time
-  and   eax, eax            ; did division result in 0?
+  or    eax, eax            ; did division result in 0?
   jnz   .convert            ; if not keep converting
 
   sub   ecx, esi            ; calculate length of string
@@ -425,7 +425,7 @@ hex2decimal:
 #### installation
 
 ```sh
-curl -L https://raw.githubusercontent.com/thlorenz/lib.asm/hex2decimal.asm > hex2decimal.asm
+curl -L https://raw.githubusercontent.com/thlorenz/lib.asm/master/hex2decimal.asm > hex2decimal.asm
 ```
 ### [`strlen`](strlen.asm)
 
@@ -492,7 +492,7 @@ section .data
 #### installation
 
 ```sh
-curl -L https://raw.githubusercontent.com/thlorenz/lib.asm/strlen.asm > strlen.asm
+curl -L https://raw.githubusercontent.com/thlorenz/lib.asm/master/strlen.asm > strlen.asm
 ```
 ### [`strncmp`](strncmp.asm)
 
@@ -503,8 +503,8 @@ curl -L https://raw.githubusercontent.com/thlorenz/lib.asm/strlen.asm > strlen.a
 ; strncmp
 ;   compares two strings for char by char until the given length
 ;
-; args: esi = effective address of first string  (lea)
-;       edi = effective address of second string (lea)
+; args: esi = address of first string
+;       edi = address of second string
 ;       eax = index until which to check (string length)
 ; out : eax = 0 if strings are equal, otherwise > 0
 ;       all other registers preserved
@@ -543,14 +543,14 @@ strncmp:
   mov   eax, uno.len
   call  strncmp
 
-  and   eax, eax        ; eax is zero if strings were equal
+  or    eax, eax        ; eax is zero if strings were equal
   jnz   .fail
 ```
 
 #### installation
 
 ```sh
-curl -L https://raw.githubusercontent.com/thlorenz/lib.asm/strncmp.asm > strncmp.asm
+curl -L https://raw.githubusercontent.com/thlorenz/lib.asm/master/strncmp.asm > strncmp.asm
 ```
 ### [`sys_nanosleep`](sys_nanosleep.asm)
 
@@ -602,7 +602,7 @@ sys_nanosleep:
 #### installation
 
 ```sh
-curl -L https://raw.githubusercontent.com/thlorenz/lib.asm/sys_nanosleep.asm > sys_nanosleep.asm
+curl -L https://raw.githubusercontent.com/thlorenz/lib.asm/master/sys_nanosleep.asm > sys_nanosleep.asm
 ```
 ### [`sys_signal`](sys_signal.asm)
 
@@ -660,7 +660,7 @@ sig_term_handler:
 #### installation
 
 ```sh
-curl -L https://raw.githubusercontent.com/thlorenz/lib.asm/sys_signal.asm > sys_signal.asm
+curl -L https://raw.githubusercontent.com/thlorenz/lib.asm/master/sys_signal.asm > sys_signal.asm
 ```
 ### [`sys_write_stdout`](sys_write_stdout.asm)
 
@@ -709,7 +709,7 @@ section .text
 #### installation
 
 ```sh
-curl -L https://raw.githubusercontent.com/thlorenz/lib.asm/sys_write_stdout.asm > sys_write_stdout.asm
+curl -L https://raw.githubusercontent.com/thlorenz/lib.asm/master/sys_write_stdout.asm > sys_write_stdout.asm
 ```
 
 <!-- END lib.asm documentation -->

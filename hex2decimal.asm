@@ -35,7 +35,7 @@ hex2decimal:
   mov   byte [esi], dl      ; store converted digit
                             ;   stosb would be faster here, but then we'd need to
                             ;   rearrange which is in what register which also takes time
-  and   eax, eax            ; did division result in 0?
+  or    eax, eax            ; did division result in 0?
   jnz   .convert            ; if not keep converting
 
   sub   ecx, esi            ; calculate length of string
@@ -93,7 +93,7 @@ _start:
   mov   eax, 4
   call  strncmp  
 
-  and   eax, eax
+  or    eax, eax
   jnz   .fail
 
 .pass:

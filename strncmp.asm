@@ -5,8 +5,8 @@ section .text
 ; strncmp
 ;   compares two strings for char by char until the given length
 ;
-; args: esi = effective address of first string  (lea)
-;       edi = effective address of second string (lea)
+; args: esi = address of first string
+;       edi = address of second string
 ;       eax = index until which to check (string length)
 ; out : eax = 0 if strings are equal, otherwise > 0
 ;       all other registers preserved
@@ -63,7 +63,7 @@ _start:
   mov   eax, uno.len
   call  strncmp
 
-  and   eax, eax        ; eax is zero if strings were equal
+  or    eax, eax        ; eax is zero if strings were equal
   jnz   .fail
 ;;;
 
@@ -72,7 +72,7 @@ _start:
   mov   eax, uno.len
   call strncmp
 
-  and  eax, eax
+  or   eax, eax
   jz   .fail
 
 .pass:
