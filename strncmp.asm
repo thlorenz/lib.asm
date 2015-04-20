@@ -17,16 +17,23 @@ strncmp:
   push  edi
   push  esi
 
-  mov   ecx, eax      ; loop until we reach given length
-
+  mov   ecx, eax        ; loop until we reach given length
+                         
   cld
 .while_equal:
-  lodsb               ; loads si into al and incs si
-  scasb               ; compares di to al and incs di
-  loopz .while_equal  ; loop until cmp unsets ZF or ecx becomes zero
+  lodsb                 ; loads si into al and incs si
+  scasb                 ; compares di to al and incs di
+  loopz .while_equal    ; loop until cmp unsets ZF or ecx becomes zero
 
-  mov   eax, ecx      ; ecx will be zero unless loop finished due to inequality
+  jnz   .last_not_equal ; account for possibility that last chars were not equal
 
+  mov   eax, ecx        ; ecx will be zero unless loop finished due to inequality
+  jmp   .done
+
+.last_not_equal:
+  mov   eax, 1
+
+.done:
   pop   esi
   pop   edi
   pop   ecx
@@ -47,6 +54,8 @@ section .data
     .len    : equ $-uno
   one_in_es : db "uno"
     .len    : equ $-one_in_es
+  uni       : db "uni"
+    .len    : equ $-uni
   eins      : db "eins"
     .len    : equ $-eins
 
@@ -69,6 +78,14 @@ _start:
 
   mov   esi, uno
   mov   edi, eins 
+  mov   eax, uno.len
+  call strncmp
+
+  or   eax, eax
+  jz   .fail
+
+  mov   esi, uno
+  mov   edi, uni        ; last char different
   mov   eax, uno.len
   call strncmp
 

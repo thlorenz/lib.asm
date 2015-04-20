@@ -13,7 +13,7 @@ section .text
 ;   the written string is 14 (2 + 3 * 4) bytes long
 ;
 ; args: eax = dword to store
-; out : esi = address of the 48 bytes string in which the result is stored
+; out : esi = address of the 14 bytes string in which the result is stored
 ;       all other registers preserved
 ; --------------------------------------------------------------
 global dword2str
@@ -51,7 +51,7 @@ dword2str:
 
   or    esi, 0
   jz   .done
-                                          ; repeat same for upper upper 16-bits
+                                          ; repeat same for upper 16-bits
   dec   esi                               ; start at 3rd slot from right
   shr   ebx, 16                           ; push upper 16 bits of ebx into bx
   jmp   .process_bx

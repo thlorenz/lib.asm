@@ -285,7 +285,7 @@ curl -L https://raw.githubusercontent.com/thlorenz/lib.asm/master/ansi_term_clea
 ;   the written string is 14 (2 + 3 * 4) bytes long
 ;
 ; args: eax = dword to store
-; out : esi = address of the 48 bytes string in which the result is stored
+; out : esi = address of the 14 bytes string in which the result is stored
 ;       all other registers preserved
 ; --------------------------------------------------------------
 ```
@@ -327,7 +327,7 @@ dword2str:
 
   or    esi, 0
   jz   .done
-                                          ; repeat same for upper upper 16-bits
+                                          ; repeat same for upper 16-bits
   dec   esi                               ; start at 3rd slot from right
   shr   ebx, 16                           ; push upper 16 bits of ebx into bx
   jmp   .process_bx
@@ -519,16 +519,23 @@ strncmp:
   push  edi
   push  esi
 
-  mov   ecx, eax      ; loop until we reach given length
-
+  mov   ecx, eax        ; loop until we reach given length
+                         
   cld
 .while_equal:
-  lodsb               ; loads si into al and incs si
-  scasb               ; compares di to al and incs di
-  loopz .while_equal  ; loop until cmp unsets ZF or ecx becomes zero
+  lodsb                 ; loads si into al and incs si
+  scasb                 ; compares di to al and incs di
+  loopz .while_equal    ; loop until cmp unsets ZF or ecx becomes zero
 
-  mov   eax, ecx      ; ecx will be zero unless loop finished due to inequality
+  jnz   .last_not_equal ; account for possibility that last chars were not equal
 
+  mov   eax, ecx        ; ecx will be zero unless loop finished due to inequality
+  jmp   .done
+
+.last_not_equal:
+  mov   eax, 1
+
+.done:
   pop   esi
   pop   edi
   pop   ecx
@@ -576,10 +583,9 @@ sys_nanosleep:
   push  ebx
   push  ecx
 
-                                ; build timespec struct on top of the stack
-  mov   dword [ esp - 8 ], ecx  ; push seconds (tv_sec)
-  mov   dword [ esp - 4 ], edx  ; followed by nanoseconds (tv_nsec)
-                                ; esp now points @ecx
+                                ; build timespec struct in stack 
+  mov   dword [ esp - 8 ], ecx  ; seconds (tv_sec)
+  mov   dword [ esp - 4 ], edx  ; nanoseconds (tv_nsec)
 
   mov   eax, SYS_NANOSLEEP
   lea   ebx, [ esp - 8]         ; point ebx at timespec
