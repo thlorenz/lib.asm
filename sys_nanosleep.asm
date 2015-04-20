@@ -25,10 +25,9 @@ sys_nanosleep:
   push  ebx
   push  ecx
 
-                                ; build timespec struct on top of the stack
-  mov   dword [ esp - 8 ], ecx  ; push seconds (tv_sec)
-  mov   dword [ esp - 4 ], edx  ; followed by nanoseconds (tv_nsec)
-                                ; esp now points @ecx
+                                ; build timespec struct in stack 
+  mov   dword [ esp - 8 ], ecx  ; seconds (tv_sec)
+  mov   dword [ esp - 4 ], edx  ; nanoseconds (tv_nsec)
 
   mov   eax, SYS_NANOSLEEP
   lea   ebx, [ esp - 8]         ; point ebx at timespec
