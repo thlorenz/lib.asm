@@ -69,6 +69,17 @@ dword2str:
 ;-------+
 
 %ifenv dword2str
+
+extern strncmp
+
+section .data
+  fail        : db 10,"FAILED!",10,0
+    .len      : equ $-fail
+  pass        : db 10, "PASSED!",10,0
+    .len      : equ $-pass
+  expected    : db "0x 01 23 ab cd"
+    .len      : equ $-expected
+
 section .text
 
 global _start
@@ -87,16 +98,35 @@ _start:
   mov   edx, 14
   int   80H
 ;;;
-  jmp   .pass
+
+; Assert result (in esi) is 0x01 23 ab cd
+.test:
+  mov   edi, expected
+  mov   eax, expected.len
+  call  strncmp
+
+  and   eax, eax
+  jnz   .fail
+
+.pass:
+  mov   eax, 4
+  mov   ebx, 1
+  mov   ecx, pass
+  mov   edx, pass.len
+  int   80h
+
+  mov   ebx, 0
+  jmp   .exit
 
 .fail:
-;  _sys_write FAILMSG, FAILLEN
-  mov ebx, 1
-  jmp .exit
-.pass:
-;  _sys_write PASSMSG, PASSLEN
-  mov ebx, 0
+  mov   eax, 4
+  mov   ebx, 1
+  mov   ecx, fail
+  mov   edx, fail.len
+  int   80h
+
+  mov   ebx, 1
 .exit:
-  mov eax, 1
-  int 80H
+  mov   eax, 1
+  int   80H
 %endif

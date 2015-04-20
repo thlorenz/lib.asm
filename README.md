@@ -42,21 +42,26 @@ Collection of assembly routines in one place to facilitate reuse.
     - [code](#code-6)
     - [example](#example-4)
     - [installation](#installation-6)
-  - [[`sys_nanosleep`](sys_nanosleep.asm)](#sys_nanosleepsys_nanosleepasm)
+  - [[`strncmp`](strncmp.asm)](#strncmpstrncmpasm)
     - [documentation](#documentation-7)
     - [code](#code-7)
     - [example](#example-5)
     - [installation](#installation-7)
-  - [[`sys_signal`](sys_signal.asm)](#sys_signalsys_signalasm)
+  - [[`sys_nanosleep`](sys_nanosleep.asm)](#sys_nanosleepsys_nanosleepasm)
     - [documentation](#documentation-8)
     - [code](#code-8)
     - [example](#example-6)
     - [installation](#installation-8)
-  - [[`sys_write_stdout`](sys_write_stdout.asm)](#sys_write_stdoutsys_write_stdoutasm)
+  - [[`sys_signal`](sys_signal.asm)](#sys_signalsys_signalasm)
     - [documentation](#documentation-9)
     - [code](#code-9)
     - [example](#example-7)
     - [installation](#installation-9)
+  - [[`sys_write_stdout`](sys_write_stdout.asm)](#sys_write_stdoutsys_write_stdoutasm)
+    - [documentation](#documentation-10)
+    - [code](#code-10)
+    - [example](#example-8)
+    - [installation](#installation-10)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
@@ -413,7 +418,7 @@ hex2decimal:
 
 ```asm
   mov   eax, 0x123f           ; number we are printing
-  mov   esi, BUFFER + 32      ; end of buffer
+  mov   esi, buffer + 32      ; end of buffer
   call  hex2decimal
 ```
 
@@ -488,6 +493,64 @@ section .data
 
 ```sh
 curl -L https://raw.githubusercontent.com/thlorenz/lib.asm/strlen.asm > strlen.asm
+```
+### [`strncmp`](strncmp.asm)
+
+#### documentation
+
+```asm
+; --------------------------------------------------------------
+; strncmp
+;   compares two strings for char by char until the given length
+;
+; args: esi = effective address of first string  (lea)
+;       edi = effective address of second string (lea)
+;       eax = index until which to check (string length)
+; out : eax = 0 if strings are equal, otherwise > 0
+;       all other registers preserved
+; --------------------------------------------------------------
+```
+
+#### code
+
+```asm
+strncmp:
+  push  ecx
+  push  edi
+  push  esi
+
+  mov   ecx, eax      ; loop until we reach given length
+
+  cld
+.while_equal:
+  lodsb               ; loads si into al and incs si
+  scasb               ; compares di to al and incs di
+  loopz .while_equal  ; loop until cmp unsets ZF or ecx becomes zero
+
+  mov   eax, ecx      ; ecx will be zero unless loop finished due to inequality
+
+  pop   esi
+  pop   edi
+  pop   ecx
+
+```
+
+#### example
+
+```asm
+  mov   esi, uno
+  mov   edi, one_in_es
+  mov   eax, uno.len
+  call  strncmp
+
+  and   eax, eax        ; eax is zero if strings were equal
+  jnz   .fail
+```
+
+#### installation
+
+```sh
+curl -L https://raw.githubusercontent.com/thlorenz/lib.asm/strncmp.asm > strncmp.asm
 ```
 ### [`sys_nanosleep`](sys_nanosleep.asm)
 

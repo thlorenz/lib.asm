@@ -53,13 +53,16 @@ hex2decimal:
 
 %ifenv hex2decimal
 
+extern strncmp
+
 section .data
-  BUFFER: times 32 db 0
-  AFTERBUFFER: db "!!!you should not see this"
-  FAILMSG:  db 10,"FAILED!",10,0
-  FAILLEN   equ $-FAILMSG
-  PASSMSG:  db 10, "PASSED!",10,0
-  PASSLEN   equ $-PASSMSG
+  buffer      : times 32 db 0
+  afterbuffer : db "!!!you should not see this"
+  expected    : db "4671"
+  fail        : db 10,"FAILED!",10,0
+    .len      : equ $-fail
+  pass        : db 10, "PASSED!",10,0
+    .len      : equ $-pass
 
 section .text
 
@@ -72,7 +75,7 @@ _start:
 .example:
 ;;;
   mov   eax, 0x123f           ; number we are printing
-  mov   esi, BUFFER + 32      ; end of buffer
+  mov   esi, buffer + 32      ; end of buffer
   call  hex2decimal
 ;;;
   ; syswrite
@@ -84,31 +87,20 @@ _start:
   mov   ecx, esi
   int   80H
 
-  jmp   .test
-
-.check:
-  mov   bl, byte [ esi ]
-  xor   al, bl
-  jnz   .fail
-  inc   esi
-  ret
-
-; Assert result is 4671
+; Assert result (in esi) is 4671
 .test:
-  mov   al, '4'
-  call  .check
-  mov   al, '6'
-  call  .check
-  mov   al, '7'
-  call  .check
-  mov   al, '1'
-  call  .check
+  mov   edi, expected
+  mov   eax, 4
+  call  strncmp  
+
+  and   eax, eax
+  jnz   .fail
 
 .pass:
   mov   eax, 4
   mov   ebx, 1
-  mov   ecx, PASSMSG
-  mov   edx, PASSLEN
+  mov   ecx, pass
+  mov   edx, pass.len
   int   80h
 
   mov   ebx, 0
@@ -117,8 +109,8 @@ _start:
 .fail:
   mov   eax, 4
   mov   ebx, 1
-  mov   ecx, FAILMSG
-  mov   edx, FAILLEN
+  mov   ecx, fail 
+  mov   edx, fail.len
   int   80h
 
   mov   ebx, 1
