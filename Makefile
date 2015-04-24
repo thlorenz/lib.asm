@@ -35,6 +35,8 @@ ansi_cursor_position: sys_write_stdout.o hex2decimal.o
 
 ansi_term_clear: sys_write_stdout.o
 
+dword2decimal: hex2decimal.o strncmp.o
+
 dword2str: strncmp.o
 
 hex2decimal: strncmp.o

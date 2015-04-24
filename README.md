@@ -27,41 +27,46 @@ Collection of assembly routines in one place to facilitate reuse.
     - [code](#code-3)
     - [example](#example-1)
     - [installation](#installation-3)
-  - [[`dword2str`](dword2str.asm)](#dword2strdword2strasm)
+  - [[`dword2decimal`](dword2decimal.asm)](#dword2decimaldword2decimalasm)
     - [documentation](#documentation-4)
     - [code](#code-4)
     - [example](#example-2)
     - [installation](#installation-4)
-  - [[`hex2decimal`](hex2decimal.asm)](#hex2decimalhex2decimalasm)
+  - [[`dword2str`](dword2str.asm)](#dword2strdword2strasm)
     - [documentation](#documentation-5)
     - [code](#code-5)
     - [example](#example-3)
     - [installation](#installation-5)
-  - [[`strlen`](strlen.asm)](#strlenstrlenasm)
+  - [[`hex2decimal`](hex2decimal.asm)](#hex2decimalhex2decimalasm)
     - [documentation](#documentation-6)
     - [code](#code-6)
     - [example](#example-4)
     - [installation](#installation-6)
-  - [[`strncmp`](strncmp.asm)](#strncmpstrncmpasm)
+  - [[`strlen`](strlen.asm)](#strlenstrlenasm)
     - [documentation](#documentation-7)
     - [code](#code-7)
     - [example](#example-5)
     - [installation](#installation-7)
-  - [[`sys_nanosleep`](sys_nanosleep.asm)](#sys_nanosleepsys_nanosleepasm)
+  - [[`strncmp`](strncmp.asm)](#strncmpstrncmpasm)
     - [documentation](#documentation-8)
     - [code](#code-8)
     - [example](#example-6)
     - [installation](#installation-8)
-  - [[`sys_signal`](sys_signal.asm)](#sys_signalsys_signalasm)
+  - [[`sys_nanosleep`](sys_nanosleep.asm)](#sys_nanosleepsys_nanosleepasm)
     - [documentation](#documentation-9)
     - [code](#code-9)
     - [example](#example-7)
     - [installation](#installation-9)
-  - [[`sys_write_stdout`](sys_write_stdout.asm)](#sys_write_stdoutsys_write_stdoutasm)
+  - [[`sys_signal`](sys_signal.asm)](#sys_signalsys_signalasm)
     - [documentation](#documentation-10)
     - [code](#code-10)
     - [example](#example-8)
     - [installation](#installation-10)
+  - [[`sys_write_stdout`](sys_write_stdout.asm)](#sys_write_stdoutsys_write_stdoutasm)
+    - [documentation](#documentation-11)
+    - [code](#code-11)
+    - [example](#example-9)
+    - [installation](#installation-11)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
@@ -273,6 +278,82 @@ ansi_term_clear:
 
 ```sh
 curl -L https://raw.githubusercontent.com/thlorenz/lib.asm/master/ansi_term_clear.asm > ansi_term_clear.asm
+```
+### [`dword2decimal`](dword2decimal.asm)
+
+#### documentation
+
+```asm
+; --------------------------------------------------------------
+; dword2decimal
+;   converts given dword register value to decimal string
+;   the output format is as follows, using eax as example: 'eax:ax:ah:al'
+;
+; args: eax = dword (register content) number to store
+; out : esi = addr in string at which the number starts
+;       eax = length of stored string
+;       all other registers preserved
+; --------------------------------------------------------------
+```
+
+#### code
+
+```asm
+dword2decimal:
+  push  ebx
+
+  mov   ebx, eax
+
+  lea   esi, [ buffer.colons + 3 ]  ; start writing at end of available buffer
+                                    ; hex2decimal will write before esi and update it for us
+
+  and   eax, 0x000000ff             ; al
+  call  hex2decimal                 ; esi now at start of string we just stored
+
+  dec   esi
+  mov   byte [esi], ':'
+
+  mov   eax, ebx                    ; ah
+  shr   eax, 8
+  and   eax, 0x000000ff
+  call  hex2decimal
+
+  dec   esi
+  mov   byte [esi], ':'
+
+  mov   eax, ebx                    ; ax
+  and   eax, 0x0000ffff
+  call  hex2decimal
+
+  dec   esi
+  mov   byte [ esi ], ':'
+
+  mov   eax, ebx                    ; eax
+  call  hex2decimal
+
+  lea   eax, [ buffer.colons + 3 ]    ; calculate length of string (including last char)
+  sub   eax, esi
+
+  pop  ebx
+```
+
+#### example
+
+```asm
+  mov   eax, 0xbada5501
+  call  dword2decimal
+
+  mov   ecx, esi      ; print string that holds the result
+  mov   edx, eax
+  mov   eax, 4
+  mov   ebx, 1
+  int   80h
+```
+
+#### installation
+
+```sh
+curl -L https://raw.githubusercontent.com/thlorenz/lib.asm/master/dword2decimal.asm > dword2decimal.asm
 ```
 ### [`dword2str`](dword2str.asm)
 
