@@ -4,8 +4,8 @@ extern hex2decimal
 
 section .data
   ansi_cursor   : db 27,"["
-  ansi_cursor_x : db '000;'
-  ansi_cursor_y : db '000H'
+  ansi_cursor_y : db '000;'
+  ansi_cursor_x : db '000H'
   ansi_cursor_len equ $-ansi_cursor
 section .text
 
@@ -13,8 +13,8 @@ section .text
 ; ansi_cursor_position
 ;     moves cursor to given position
 ;
-; args: al = column (x)
-;       ah = row    (y)
+; args: ah = column (x)
+;       al = row    (y)
 ; out : nothing, all registers preserved
 ; calls: sys_write_stdout, hex2decimal
 ; --------------------------------------------------------------
@@ -68,8 +68,8 @@ global _start
 _start:
   nop
 ;;;
-  mov ah, 10
-  mov al, 30
+  mov ah, 30
+  mov al, 10
   call ansi_cursor_position
 ;;;
   mov   ecx, x

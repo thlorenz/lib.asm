@@ -143,8 +143,8 @@ curl -L https://raw.githubusercontent.com/thlorenz/lib.asm/master/ansi_cursor_hi
 ; ansi_cursor_position
 ;     moves cursor to given position
 ;
-; args: al = column (x)
-;       ah = row    (y)
+; args: ah = column (x)
+;       al = row    (y)
 ; out : nothing, all registers preserved
 ; calls: sys_write_stdout, hex2decimal
 ; --------------------------------------------------------------
@@ -194,8 +194,8 @@ ansi_cursor_position:
 #### example
 
 ```asm
-  mov ah, 10
-  mov al, 30
+  mov ah, 30
+  mov al, 10
   call ansi_cursor_position
 ```
 
